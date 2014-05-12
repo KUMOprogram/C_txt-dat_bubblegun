@@ -1,0 +1,177 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct lesson{
+  int lessonId;    
+  char lessonname[40];      
+  int weekhours;
+  int semester;
+  char semestername[10];
+};
+
+int main (void)
+{
+     system("color f1");
+     
+     int i,j,n,something;
+     struct lesson lessons;
+     
+     FILE *less;                                //create less file
+     FILE *counter;                             //create counter file
+     
+     less=fopen("dats/lesson.dat","r");
+     if (less==NULL)
+     {
+                    system("md dats");   //md gia fakelo
+                    less=fopen("dats/lesson.dat","w");  //lessons se dat
+                    counter=fopen("dats/counter.txt","w");  //metrhths se txt
+                    fprintf(counter,"%i",0);  //arxikopoihsh
+                    fclose(counter);
+     }
+     fclose(less);
+
+_Bool flag;
+while(flag)
+{
+system("cls");
+fflush(stdin);
+
+	 int a;
+     printf("1 - reset file\n");
+     printf("2 - add new\n");
+     printf("3 - print in screen\n");
+     printf("4 - bubble based on hours per week\n");
+     printf("5 - end program\n");
+     printf("Choice: ");
+     scanf("%i",&a);
+     
+     if (a==1)
+     {
+          less=fopen("dats/lesson.dat","w");
+          counter=fopen("dats/counter.txt","w");
+          fprintf(counter,"%i",0);
+          fclose(less);
+          fclose(counter);
+
+     printf("\nEKANE RESET EPITUXIA sto dats/lesson.dat\n");
+     printf("\nEKANE RESET EPITUXIA sto dats/counter.txt\n");
+     system("pause");
+	 }
+     
+     if (a==2)
+     {
+     counter=fopen("dats/counter.txt","r");
+        fscanf(counter,"%i",&j);      //counter
+     fclose(counter);
+                 
+        printf("dwse ID ma8hmatos %i: ", j+1);  //read
+        scanf("%i", &lessons.lessonId);
+        printf("dwse onoma ma8hmatos %i: ", j+1);
+        scanf("%s", lessons.lessonname);
+        printf("dwse wres ma8hmatos %i: ", j+1);
+        scanf("%i", &lessons.weekhours);
+        printf("dwse e3amino ma8hmatos (ari8mhtika) %i: ", j+1);
+        scanf("%i", &lessons.semester);
+        printf("dwse e3amhno ma8hmatos (earino/xeimerino) %i: ", j+1);
+        scanf("%s", lessons.semestername);
+        
+        less=fopen("dats/lesson.dat","a");   //save
+            fwrite(&lessons,sizeof(struct lesson),1,less);
+        close(less);
+     
+     j++;   
+     counter=fopen("dats/counter.txt","w");   //counter+1
+        fprintf(counter,"%i",j);
+     fclose(counter);
+     
+     printf("\nAPO8HKEYTHKE ME EPITUXIA sto dats/lesson.dat\n");
+     system("pause");
+     }
+     
+     if (a==3)
+     {
+     counter=fopen("dats/counter.txt","r");
+        fscanf(counter,"%i",&j);      //counter
+     fclose(counter);
+     
+     less=fopen("dats/lesson.dat","r");  //open to less
+      if (less!=NULL)
+      {
+         for (i=0; i<j; i++)
+         {   
+               something=fread(&lessons,sizeof(struct lesson),1,less);
+			   printf("------------------------------------------------------\n");
+               printf("ID ma8hmatos %i: %i\n", i+1, lessons.lessonId);
+               printf("onoma ma8hmatos %i: %s\n", i+1, lessons.lessonname);
+               printf("wres ma8hmatos %i: %i\n", i+1, lessons.weekhours);
+               printf("e3amhno ma8hmatos %i: %i\n", i+1, lessons.semester);
+               printf("e3amhno ma8hmatos %i: %s\n", i+1, lessons.semestername);
+         }      
+      }
+     close(less);
+     
+     system("pause");
+     }
+     
+     if (a==4)
+     {
+     counter=fopen("dats/counter.txt","r");
+        fscanf(counter,"%i",&j);      //counter
+     fclose(counter);
+     
+     struct lesson les[j];
+     
+     less=fopen("dats/lesson.dat","r");  //open to less
+      if (less!=NULL)
+      {
+         for (i=0; i<j; i++)
+         {   
+               something=fread(&lessons,sizeof(struct lesson),1,less);
+               les[i]=lessons;
+         }      
+      }
+     close(less);
+
+		int c;                   //squirtle bubble gun
+        for(i=0; i<j; i++)
+        {
+              for (n=j; n>i; n--)
+              {
+                  if (les[i].weekhours>les[n].weekhours)
+                  {
+                     c=les[i].weekhours;
+                     les[i].weekhours=les[n].weekhours;
+                     les[n].weekhours=c;
+                     
+                  }
+              }
+        }
+        
+        for (i=0; i<j; i++)    //tupwsh sthn o8onh me thn seira
+        {   
+               printf("------------------------------------------------------\n");
+               printf("ID ma8hmatos %i: %i\n", i+1, les[i].lessonId);
+               printf("onoma ma8hmatos %i: %s\n", i+1, les[i].lessonname);
+               printf("wres ma8hmatos %i: %i\n", i+1, les[i].weekhours);
+               printf("e3amhno ma8hmatoss %i: %i\n", i+1, les[i].semester);
+               printf("e3amhno ma8hmatos %i: %s\n", i+1, les[i].semestername);
+        }
+
+	 system("pause");
+     }
+     
+     if (a==5)   //termatismos programmatos me flag
+     {
+			flag=0;
+     }
+     
+     if (a!=1 && a!=2 && a!=3 && a!=4 && a!=5)  //ama balleis malakia...
+     {
+			printf("@@@ WRONG CHOICE @@@\nput 1 or 2 or 3 or 4\n");
+			system("pause");
+     }
+}
+
+return 0;
+}
